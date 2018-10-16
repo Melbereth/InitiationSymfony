@@ -3,8 +3,12 @@
 {% form_theme formArticle 'bootstrap_4_layout.html.twig' %}
 
 {% block body %}
-
-    <h1>New article</h1>
+    
+        {% if editMode %}
+            <h1>Editer</h1>
+        {% else %}
+             <h1>New article</h1>                
+        {% endif %}
 
     {{ form_start(formArticle) }}
 
@@ -12,7 +16,15 @@
     {{ form_row(formArticle.content, {'attr' : {'placeholder': "Contenu"}}) }}
     {{ form_row(formArticle.image, {'attr' : {'placeholder': "L'image"}}) }}
 
-    <button type="submit" class="btn btn-success">Ajouter</button>
+    <button type="submit" class="btn btn-success">
+        {% if editMode %}
+            Enregistrer
+        {% else %}
+             Ajouter                
+        {% endif %}
+        
+   
+    </button>
 
     {{ form_end(formArticle) }}
 

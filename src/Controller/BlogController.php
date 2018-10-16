@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
+use App\Form\ArticleType;
 
 class BlogController extends AbstractController
 {
@@ -39,20 +40,23 @@ class BlogController extends AbstractController
 
     /**
      * @Route("/blog/new", name="blog_create")
+     * @Route("/blog/{id}/edit", name="blog_edit")
      */
-    public function create(Request $request, ObjectManager $manager) {
-        $article = new Article();
+    public function form(Article $article = null, Request $request, ObjectManager $manager) {
 
-        $form = $this->createFormBuilder($article)
-                     ->add('title')
-                     ->add('content')
-                     ->add('image')
-                     ->getForm();
+        if(!$article) {
+            $article = new Article();
+        }
+
+        $form = $this->createForm(ArticleType::class, $article);
 
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $article->setCreatedAt(new \DateTime());
+
+            if(!$article->getId()) {
+                $article->setCreatedAt(new \DateTime());
+            }
 
             $manager->persist($article);
             $manager->flush();
@@ -61,7 +65,8 @@ class BlogController extends AbstractController
         }
 
        return $this->render('blog/create.html.twig', [
-           'formArticle' => $form->createView()
+           'formArticle' => $form->createView(),
+           'editMode' =>$article->getId() !== null
        ]);
     }
 
