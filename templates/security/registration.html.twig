@@ -5,7 +5,12 @@
     <h1>Inscription</h1>
 
     {{ form_start(form) }}
-    {{ form_widget(form)}}
+
+    {{ form_row(form.username, {'label': 'Utilisateur', 'attr': {'placeholder': 'Username'}})}}
+    {{ form_row(form.email, {'label': 'Email','attr': {'placeholder': 'email'}})}}
+    {{ form_row(form.password, {'label': 'Mot de passe','attr': {'placeholder': 'Password'}})}}
+    {{ form_row(form.confirm_password, {'label': 'Confirmer Mot de passe','attr': {'placeholder': 'Confirm Password'}})}}
+
     <button type="submit" class="btn btn-primary">Inscription</button>
     {{form_end(form)}}
 {% endblock %}
